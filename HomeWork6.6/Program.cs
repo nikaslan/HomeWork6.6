@@ -9,13 +9,7 @@ namespace HomeWork6._6
 {
     class Program
     {
-        
-        static bool fileExist(string filepath)
-        {
-            bool exists = File.Exists(filepath);
-            return exists;
-        }
-        
+    
         static void readEntrys(string filepath)
         {
             // считываение файла построчко, записываем каждую строку в отдельный элемент массива. 
@@ -30,10 +24,22 @@ namespace HomeWork6._6
             }
         }
 
-        static void addEntry()
+        static void addEntry(string filepath)
         {
-            Console.WriteLine("Введите имя нового сотрудника");
+            int id = 0;
+            
+            if (File.Exists(filepath))
+            {
+                string[] temp = File.ReadAllLines(filepath);
+                id = temp.Length;
+            }
+            else
+            {
+                File.Create(filepath);
+            }
 
+            Console.WriteLine("Введите имя нового сотрудника");
+            
             Console.WriteLine("Введите рост нового сотрудника");
 
             Console.WriteLine("Введите дату рождения нового сотрудника");
@@ -51,22 +57,33 @@ namespace HomeWork6._6
 
             // основная логика
             Console.WriteLine("Программа-справочник \"Сотрудники\"");
-            Console.WriteLine("Нажмите 1 для вывода существующих записей. Нажмите 2 для добавления новой записи");
 
-            if (fileExist(filepath))
+            while (true)
             {
-                readEntrys(filepath);
-            } 
-            else
-            {
-                Console.WriteLine("Файл не существует, создаю файл");
-                File.Create(filepath);
+                Console.Clear();
+                Console.WriteLine("Нажмите 1 для вывода существующих записей. Нажмите 2 для добавления новой записи. Для выхода, нажмите Esc.");
+                var key = Console.ReadKey(true).Key;
+                if (((char)key) == '1')
+                {
+                    readEntrys(filepath);
+                    Console.WriteLine("\nНажмите любую кнопку для возврата на главный экран.");
+                    Console.ReadKey(true);
+                    continue;
+                }
+                else if (((char)key) == '2')
+                {
+                    Console.WriteLine("Опция 2");
+                    Console.WriteLine("\nНажмите любую кнопку для возврата на главный экран.");
+                    Console.ReadKey(true);
+                    continue;
+                }
+                else if (key == ConsoleKey.Escape)
+                {
+                    break;
+                }
+                // если нажали на что-то, кроме 1,2 или Esc, то это не будет принято 
             }
             
-
-            Console.ReadKey();
-
-
         }
     }
 }
