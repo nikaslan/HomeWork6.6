@@ -17,15 +17,18 @@ namespace HomeWork6._6
         static void readEntrys(string filepath)
         {
             // считываение файла построчко, записываем каждую строку в отдельный элемент массива. 
-            // 1#20.12.2021 00:12#Иванов Иван Иванович#25#176#05.05.1992#город Москва
             string[] employees = File.ReadAllLines(filepath);
             Console.WriteLine("Список сотрудников:\n");
             Console.WriteLine("ID | Добавлен        | Имя                      | Возраст | Рост | Дата рож. | Место рождения");
             // парсинг каждой строки и вывод на экран
             foreach(string employee in employees)
             {
-                string[] entry = employee.Split('#');
-                Console.WriteLine($"{entry[0],3}| {entry[1],16}| {entry[2],25}| {entry[3],8}| {entry[4],3}см| {entry[5], 10}| {entry[6]}");
+                if (employee != "")
+                {
+                    string[] entry = employee.Split('#');
+                    Console.WriteLine($"{entry[0],3}| {entry[1],16}| {entry[2],25}| {entry[3],8}| {entry[4],3}см| {entry[5],10}| {entry[6]}");
+                }
+
             }
         }
         /// <summary>

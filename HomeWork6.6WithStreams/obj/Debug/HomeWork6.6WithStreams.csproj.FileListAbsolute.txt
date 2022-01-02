@@ -1,0 +1,7 @@
+C:\Users\User\source\repos\HomeWork6.6\HomeWork6.6WithStreams\bin\Debug\HomeWork6.6WithStreams.exe.config
+C:\Users\User\source\repos\HomeWork6.6\HomeWork6.6WithStreams\bin\Debug\HomeWork6.6WithStreams.exe
+C:\Users\User\source\repos\HomeWork6.6\HomeWork6.6WithStreams\bin\Debug\HomeWork6.6WithStreams.pdb
+C:\Users\User\source\repos\HomeWork6.6\HomeWork6.6WithStreams\obj\Debug\HomeWork6.6WithStreams.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\HomeWork6.6\HomeWork6.6WithStreams\obj\Debug\HomeWork6.6WithStreams.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\HomeWork6.6\HomeWork6.6WithStreams\obj\Debug\HomeWork6.6WithStreams.exe
+C:\Users\User\source\repos\HomeWork6.6\HomeWork6.6WithStreams\obj\Debug\HomeWork6.6WithStreams.pdb
