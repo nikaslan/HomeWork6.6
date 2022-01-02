@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 
@@ -12,12 +13,13 @@ namespace HomeWork6._6
         /// <summary>
         /// Считывает содержимое файла и выводит в консоль построчно
         /// </summary>
-        /// <param name="filepath">путь к файлу с данными для вывода</param>
+        /// <param name="filepath">путь к файлу "базы" справочника</param>
         static void readEntrys(string filepath)
         {
             // считываение файла построчко, записываем каждую строку в отдельный элемент массива. 
             // 1#20.12.2021 00:12#Иванов Иван Иванович#25#176#05.05.1992#город Москва
             string[] employees = File.ReadAllLines(filepath);
+            Console.WriteLine("Список сотрудников:\n");
             Console.WriteLine("ID | Добавлен        | Имя                      | Возраст | Рост | Дата рож. | Место рождения");
             // парсинг каждой строки и вывод на экран
             foreach(string employee in employees)
@@ -29,7 +31,7 @@ namespace HomeWork6._6
         /// <summary>
         /// Пошагово принимает данные о новом сотруднике для внесения его в базу
         /// </summary>
-        /// <param name="filepath">путь к файлу "базы"</param>
+        /// <param name="filepath">путь к файлу "базы" справочника</param>
         static void addEntry(string filepath)
         {
 
@@ -44,13 +46,11 @@ namespace HomeWork6._6
             //5 - Дата рождения
             //6 - Мето рождения
 
-
-            if (File.Exists(filepath)) // высчитываем ID для новой записи
+            if (File.Exists(filepath)) // высчитываем ID для новой записи = текущее количество строк в файле + 1
             {
                 string[] temp = File.ReadAllLines(filepath); 
                 newEntry[0] = Convert.ToString(temp.Length+1);
 
-                bool empty = (temp.Length == 0) ? true : false;
             }
             #region ввод данных
             Console.WriteLine("Введите имя нового сотрудника. *Только первые 25 символов имени будут сохранены:");
@@ -58,48 +58,84 @@ namespace HomeWork6._6
             if (newEntry[2].Length > 25) newEntry[2] = newEntry[2].Substring(0,25);
 
             Console.WriteLine("\nВведите рост нового сотрудника в сантимертах:");
-            newEntry[4] = Console.ReadLine();
-            if (newEntry[4].Length > 20) newEntry[4] = newEntry[4].Substring(0, 3);
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out int hight))
+                {
+                    if (hight < 50 || hight > 250)
+                    {
+                        Console.WriteLine("Введенный рост должен быть между 50 см и 250 см");
+                        continue;
+                    }
+                    else
+                    {
+                        newEntry[4] = Convert.ToString(hight);
+                        break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Некорректный данные о росте.");
+                }
+                
+            }
 
             // ввод дня рождения, высчитываем возраст
-            Console.WriteLine("\nВведите год рождения нового сотрудника в формате дд.мм.гггг");
-            newEntry[5] = Console.ReadLine().Substring(0, 10);
-            DateTime birthday = new DateTime(Convert.ToInt32(newEntry[5].Substring(6,4)), Convert.ToInt32(newEntry[5].Substring(3, 2)),Convert.ToInt32(newEntry[5].Substring(0, 2)));
-            
-            newEntry[3] = ((DateTime.Now - birthday).TotalDays/365.25).ToString("#");
+            Console.WriteLine("\nВведите дату рождения нового сотрудника в формате дд.мм.гггг:");
+            while (true)
+            {
+                               
+                if (DateTime.TryParse(Console.ReadLine(), out DateTime birthDay))
+                {
+                                        
+                    if (birthDay > DateTime.Now)
+                    {
+                        Console.WriteLine("Дата рождения должна быть в прошлом.");
+                        continue;
+                    }
+                    newEntry[5] = birthDay.ToString("dd.MM.yyyy");
+                    newEntry[3] = (Math.Round(((DateTime.Now - birthDay).TotalDays / 365.25), 0)).ToString();
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Некорректный формат времени.");
+                }
 
+            }
+                        
             // Ввод города рождения
-            Console.WriteLine("\nВведите место рождения нового сотрудника");
+            Console.WriteLine("\nВведите место рождения нового сотрудника:");
             newEntry[6] = Console.ReadLine();
             if (newEntry[6].Length > 20) newEntry[6] = newEntry[6].Substring(0, 20);
-
-            newEntry[1] = Convert.ToString(DateTime.Now.ToShortDateString()+" "+DateTime.Now.ToShortTimeString());
+           
             #endregion
 
+            #region подтверждение и запись введенных данных в файл
             Console.WriteLine("\nВ справочник будет внесена следующая запись:");
             Console.WriteLine("\nИмя                      | Возраст | Рост | Дата рож. | Место рождения");
             Console.WriteLine($"{newEntry[2],25}| {newEntry[3],8}| {newEntry[4],3}см| {newEntry[5],10}| {newEntry[6]}");
 
-            Console.WriteLine("\nЕсли хотите подтвердить внесение записи, нажмите 1. Для отмены - нажмите Esc.");
+            Console.WriteLine("\nЕсли хотите подтвердить внесение записи, нажмите Enter. Для отмены - нажмите Esc.");
 
+            
             while (true)
             {
 
-                
                 var key = Console.ReadKey(true).Key;
-                if (((char)key) == '1')
+                if (key == ConsoleKey.Enter)
                 {
                                         
-                    string toAppend = Convert.ToInt32(newEntry[0]) == 1 ? newEntry[0] : "\n" + newEntry[0];
+                    string toAppend = Convert.ToInt32(newEntry[0]) == 1 ? newEntry[0] : "\n" + newEntry[0]; // если запись не первая, то переносим строку перед добавлением
+                    // Дата добавления
+                    newEntry[1] = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
 
-
-                    for(int i = 1; i<newEntry.Length;i++)
+                    for (int i = 1; i<newEntry.Length;i++)
                     {
                         toAppend = toAppend + "#" + newEntry[i];
                     }
 
-                    File.AppendAllText(filepath, toAppend);
-
+                    File.AppendAllText(filepath, toAppend); //добавление новой записи в файл
                     Console.WriteLine("\nЗапись внесена");
                     break;
                 }
@@ -107,8 +143,9 @@ namespace HomeWork6._6
                 {
                     break;
                 }
-                // если нажали на что-то, кроме 1,2 или Esc, то это не будет принято 
+                // если нажали на что-то, кроме Enter или Esc, то это не будет принято 
             }
+            #endregion
 
         }
         
@@ -117,42 +154,49 @@ namespace HomeWork6._6
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.InputEncoding = System.Text.Encoding.GetEncoding("Cyrillic");
             // объявление переменных
-            string filepath = "catalogue.txt";
-
+            string filepath = "catalogue.txt";  // путь до файла, в котором хранится "Справочник"
 
             // основная логика
-            Console.WriteLine("Программа-справочник \"Сотрудники\"");
-
+            
             while (true)
             {
-                Console.Clear();
+                Console.WriteLine("Программа-справочник \"Сотрудники\".");
                 Console.WriteLine("Нажмите 1 для вывода существующих записей. Нажмите 2 для добавления новой записи. Для выхода, нажмите Esc.");
                 var key = Console.ReadKey(true).Key;
                 if (((char)key) == '1')
                 {
+                    Console.Clear();
                     if (!File.Exists(filepath))
                     {
                         Console.WriteLine("Справочник пуст. Введите хотя бы одну запись, для просмотра.");
                         Console.WriteLine("\nНажмите любую кнопку для возврата на главный экран.");
                         Console.ReadKey(true);
+                        Console.Clear();
                         continue;
                     }
                     readEntrys(filepath);
                     Console.WriteLine("\nНажмите любую кнопку для возврата на главный экран.");
                     Console.ReadKey(true);
+                    Console.Clear();
                     continue;
                 }
                 else if (((char)key) == '2')
                 {
+                    Console.Clear();
                     addEntry(filepath);
                     Console.WriteLine("\nНажмите любую кнопку для возврата на главный экран.");
                     Console.ReadKey(true);
+                    Console.Clear();
                     continue;
-                }
+                }                
                 else if (key == ConsoleKey.Escape)
                 {
+                    Console.Clear();
+                    Console.WriteLine("Программа закрывается..");
+                    Thread.Sleep(1000);
                     break;
                 }
+                Console.Clear();
                 // если нажали на что-то, кроме 1,2 или Esc, то это не будет принято 
             }
             
