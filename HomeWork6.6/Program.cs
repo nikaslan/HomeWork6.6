@@ -14,7 +14,7 @@ namespace HomeWork6._6
         /// Считывает содержимое файла и выводит в консоль построчно
         /// </summary>
         /// <param name="filepath">путь к файлу "базы" справочника</param>
-        static void readEntrys(string filepath)
+        static void ReadEntrys(string filepath)
         {
             // считываение файла построчко, записываем каждую строку в отдельный элемент массива. 
             string[] employees = File.ReadAllLines(filepath);
@@ -35,7 +35,7 @@ namespace HomeWork6._6
         /// Пошагово принимает данные о новом сотруднике для внесения его в базу
         /// </summary>
         /// <param name="filepath">путь к файлу "базы" справочника</param>
-        static void addEntry(string filepath)
+        static void AddEntry(string filepath)
         {
 
             string[] newEntry = new string[7];
@@ -177,7 +177,7 @@ namespace HomeWork6._6
                         Console.Clear();
                         continue;
                     }
-                    readEntrys(filepath);
+                    ReadEntrys(filepath);
                     Console.WriteLine("\nНажмите любую кнопку для возврата на главный экран.");
                     Console.ReadKey(true);
                     Console.Clear();
@@ -186,7 +186,7 @@ namespace HomeWork6._6
                 else if (((char)key) == '2')
                 {
                     Console.Clear();
-                    addEntry(filepath);
+                    AddEntry(filepath);
                     Console.WriteLine("\nНажмите любую кнопку для возврата на главный экран.");
                     Console.ReadKey(true);
                     Console.Clear();

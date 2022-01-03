@@ -14,7 +14,7 @@ namespace HomeWork6._6
         /// Считывает содержимое файла и выводит в консоль построчно
         /// </summary>
         /// <param name="filepath">путь к файлу "базы" справочника</param>
-        static void readEntrysStream(string filepath)
+        static void ReadEntrysStream(string filepath)
         {
             // считываение файла построчко, записываем каждую строку в отдельный элемент массива. 
             // 1#20.12.2021 00:12#Иванов Иван Иванович#25#176#05.05.1992#город Москва
@@ -39,7 +39,7 @@ namespace HomeWork6._6
         /// Пошагово принимает данные о новом сотруднике для внесения его в базу
         /// </summary>
         /// <param name="filepath">путь к файлу "базы" справочника</param>
-        static void addEntryStream(string filepath)
+        static void AddEntryStream(string filepath)
         {
             
                 
@@ -189,7 +189,7 @@ namespace HomeWork6._6
                         Console.Clear();
                         continue;
                     }
-                    readEntrysStream(filepath);
+                    ReadEntrysStream(filepath);
                     Console.WriteLine("\nНажмите любую кнопку для возврата на главный экран.");
                     Console.ReadKey(true);
                     Console.Clear();
@@ -198,7 +198,7 @@ namespace HomeWork6._6
                 else if (((char)key) == '2')
                 {
                     Console.Clear();
-                    addEntryStream(filepath);
+                    AddEntryStream(filepath);
                     Console.WriteLine("\nНажмите любую кнопку для возврата на главный экран.");
                     Console.ReadKey(true);
                     Console.Clear();
